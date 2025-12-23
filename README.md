@@ -10,6 +10,26 @@ This project demonstrates how to securely manage an Amazon EC2 instance using **
 - Following Zero Trust security principles
 This approach reflects how modern enterprises securely operate production servers in AWS.
 
+## Why This Project Matters
+Many beginners access EC2 instances using SSH and public IPs, which is insecure and not aligned with real-world cloud practices.
+This project demonstrates how modern organizations:
+- Eliminate SSH entirely
+- Use identity-based access instead of network trust
+- Reduce attack surface by default
+- Apply Zero Trust principles in AWS
+
+## Before vs After
+### Before (Traditional Approach)
+- SSH (port 22) open
+- Public IP required
+- Key pair (.pem) based access
+- Higher attack surface
+### After (This Project)
+- No SSH access
+- No inbound admin ports
+- IAM + SSM based access
+- Zero Trust security model
+
 ## Architecture Overview
 The architecture is no cost (AWS Free Tier) Design:
 - Amazon EC2 (Ubuntu instance)
@@ -56,15 +76,26 @@ EC2 Instance (No SSH, No Open Ports)
 6. Removed SSH (port 22) from the security group
 7. Verified that SSH access was no longer possible
 
-## Verification
+## Security Group Configuration
+Inbound rules after hardening:
+- No SSH (port 22 removed)
+- No admin ports exposed
+- Only required application ports (if any)
+This ensures the instance is not directly reachable from the internet.
 
+## Verification
 - SSH connection fails after removing port 22
 - EC2 remains fully accessible via AWS Session Manager
 - `whoami` returns `ssm-user`, confirming SSM-based access
 - Instance visible as "Managed Node" in AWS Systems Manager
 
-## What This Project Demonstrates
+## Screenshots 
+- EC2 instance visible as Managed Node in Systems Manager
+- Successful Session Manager connection
+- Security Group with SSH removed
 
+
+## What This Project Demonstrates
 - Practical understanding of AWS Systems Manager
 - Secure EC2 access without SSH
 - Zero Trust security concepts in cloud
@@ -72,9 +103,20 @@ EC2 Instance (No SSH, No Open Ports)
 - Real-world cloud security best practices
 
 ## Cost Considerations
-
 This project was implemented entirely within the AWS Free Tier.
 No paid services such as Load Balancers, NAT Gateways, or ECS were used.
+
+## Limitations & Next Steps
+Limitations:
+- Instance is accessed directly via SSM (no load balancer)
+- Single EC2 instance (no high availability)
+Planned Improvements:
+- Place EC2 in a private subnet
+- Add Application Load Balancer
+- Enable HTTPS (TLS)
+- Containerize application using Docker
+- Deploy using ECS
+
 
 
 
