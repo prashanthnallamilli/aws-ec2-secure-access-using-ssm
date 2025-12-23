@@ -31,12 +31,12 @@ This project demonstrates how modern organizations:
 - Zero Trust security model
 
 ## Architecture Overview
-The architecture is no cost (AWS Free Tier) Design:
+The architecture follows a no-cost (AWS Free Tier) design:
 - Amazon EC2 (Ubuntu instance)
 - IAM Role attached to EC2
-- AWS Systems Manager(Session Manager)
+- AWS Systems Manager (Session Manager)
 - No Inbound SSH Access
-- No public key authenticaion
+- No public key authentication
 
  User (IAM Identity)
         |
@@ -65,6 +65,38 @@ EC2 Instance (No SSH, No Open Ports)
 ### 4. Full Auditability
 - All access via SSM is logged in AWS
 - Supports compliance and traceability
+
+##  Production-Style Architecture Design
+In real-world cloud environments, application servers are not exposed directly to the internet.
+
+A typical production architecture follows this design:
+
+User (Browser)
+     |
+     v
+Application Load Balancer (Public Subnet)
+     |
+     v
+EC2 Application Servers (Private Subnet, No Public IP)
+     |
+     v
+Administrative Access via AWS Systems Manager (SSM)
+
+Key characteristics:
+- EC2 instances do not have public IP addresses
+- Only the Load Balancer is internet-facing
+- Administrative access is identity-based (IAM + SSM)
+- Network-level isolation using private subnets
+
+## Why This Architecture Is Used in Companies
+This architecture is widely adopted because it:
+- Eliminates direct internet exposure of servers
+- Reduces attack surface by design
+- Centralizes security controls
+- Supports Zero Trust access models
+- Allows easy scaling without redesign
+
+Even small applications benefit from this architecture due to improved security and future readiness.
 
 ## Implementation Steps
 
